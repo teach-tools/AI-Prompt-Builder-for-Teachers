@@ -13,11 +13,11 @@
         }
         /* Custom focus-ring for accessibility and style */
         select:focus, textarea:focus, input:focus, input[type="checkbox"]:focus {
-            --tw-ring-color: #2563eb; /* blue-600 */
+            --tw-ring-color: #f59e0b; /* amber-500 */
             --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
             --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
             box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-            border-color: #2563eb; /* blue-600 */
+            border-color: #f59e0b; /* amber-500 */
             outline: 2px solid transparent;
             outline-offset: 2px;
         }
@@ -25,7 +25,7 @@
         optgroup {
             font-weight: bold;
             font-style: italic;
-            color: #1d4ed8; /* blue-800 */
+            color: #b45309; /* amber-700 */
             background-color: #f3f4f6; /* gray-100 */
         }
     </style>
@@ -34,11 +34,20 @@
 
     <!-- Header -->
     <header class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 class="text-2xl md:text-3xl font-bold text-blue-700">
-                Teacher's AI Prompt Builder
-            </h1>
-            <p class="text-sm text-gray-600 mt-1">Select options to craft the perfect prompt for your needs.</p>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <!-- 
+                  IMPORTANT: Replace the 'src' below with a direct, public URL to your school's logo.
+                  The Google Drive link won't work here.
+                -->
+                <img id="school-logo" src="https://raw.githubusercontent.com/teach-tools/AI-Prompt-Builder-for-Teachers/97c3ea2a4ab0d33ddb3e0c812cfbb30250743699/lancer.png" alt="School Logo" class="h-12 w-12">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
+                        Teacher's AI Prompt Builder
+                    </h1>
+                    <p class="text-sm text-gray-600 mt-1">Select options to craft the perfect prompt for your needs.</p>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -52,7 +61,7 @@
                 <!-- Task Selector -->
                 <div>
                     <label for="task" class="block text-sm font-medium text-gray-900">What do you want to create?</label>
-                    <select id="task" name="task" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <select id="task" name="task" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm">
                         <option value="">-- Select a generator --</option>
                         <optgroup label="Generators">
                             <option value="assessment-generator">Assessment Generator</option>
@@ -104,7 +113,7 @@
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <input id="assess-answer-key" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <input id="assess-answer-key" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-amber-600 focus:ring-amber-500">
                         <label for="assess-answer-key" class="ml-2 block text-sm text-gray-700">Include Answer Key</label>
                     </div>
                 </div>
@@ -210,7 +219,7 @@
                 <!-- Subject Selector (Global) -->
                 <div>
                     <label for="subject-select" class="block text-sm font-medium text-gray-900">Subject</label>
-                    <select id="subject-select" name="subject-select" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <select id="subject-select" name="subject-select" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm">
                         <option value="">-- Select a subject --</option>
                         <optgroup label="Core Academic">
                             <option value="English / Language Arts">English / Language Arts</option>
@@ -231,7 +240,7 @@
                 <!-- Grade Level Selector (Global) -->
                 <div>
                     <label for="hs-grade-level" class="block text-sm font-medium text-gray-900">High School Grade Level</label>
-                    <select id="hs-grade-level" name="hs-grade-level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <select id="hs-grade-level" name="hs-grade-level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm">
                         <option value="">-- Select a grade level --</option>
                         <option value="Grade 9">Grade 9</option>
                         <option value="Grade 10">Grade 10</option>
@@ -244,7 +253,7 @@
                 <!-- Reading Level Selector (Global) -->
                 <div>
                     <label for="reading-level" class="block text-sm font-medium text-gray-900">Reading Level</label>
-                    <select id="reading-level" name="reading-level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <select id="reading-level" name="reading-level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm">
                         <option value="">-- Select a reading level --</option>
                         <option value="Middle School (6-8) reading level with moderate complexity and grade-level syntax">Middle School (6–8): Moderate complexity</option>
                         <option value="High School (9-10) reading level with typical text complexity for general ed">High School (9–10): Typical complexity</option>
@@ -256,13 +265,13 @@
                 <!-- Topic/Subject (Global) -->
                 <div>
                     <label for="topic" class="block text-sm font-medium text-gray-900">Topic / Skill / Text</label>
-                    <textarea id="topic" name="topic" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Mitosis, The Great Gatsby Ch. 3, Citing evidence"></textarea>
+                    <textarea id="topic" name="topic" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm" placeholder="e.g., Mitosis, The Great Gatsby Ch. 3, Citing evidence"></textarea>
                 </div>
 
                 <!-- Specific Details (Global) -->
                 <div>
                     <label for="details" class="block text-sm font-medium text-gray-900">Specific Details & Constraints</label>
-                    <textarea id="details" name="details" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Include a real-world example. The tone should be encouraging. Keep it under 150 words."></textarea>
+                    <textarea id="details" name="details" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm" placeholder="e.g., Include a real-world example. The tone should be encouraging. Keep it under 150 words."></textarea>
                 </div>
 
                 <!-- Clear Button -->
@@ -277,9 +286,9 @@
                 <!-- Prompt Box -->
                 <div>
                     <label for="output-prompt" class="block text-sm font-medium text-gray-900">Generated Prompt</label>
-                    <textarea id="output-prompt" readonly rows="8" class="flex-grow mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 font-mono text-sm text-gray-800 p-4 focus:ring-blue-500 focus:border-blue-500" placeholder="Your generated prompt will appear here..."></textarea>
+                    <textarea id="output-prompt" readonly rows="8" class="flex-grow mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 font-mono text-sm text-gray-800 p-4 focus:ring-amber-500 focus:border-amber-500" placeholder="Your generated prompt will appear here..."></textarea>
                     
-                    <button id="copy-button" class="mt-4 w-full inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <button id="copy-button" class="mt-4 w-full inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
                         <!-- SVG Copy Icon -->
                         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25c0-1.242-.93-2.25-2.06-2.25H9.56c-1.13 0-2.06.918-2.06 2.25v9c0 1.242.93 2.25 2.06 2.25h4.88c1.13 0 2.06-.918 2.06-2.25v-9z M12 15.75h.007v.008H12v-.008z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75h4.5v1.5h-4.5z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75c-.621 0-1.125-.504-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.46-7.5-8.46S4.5 6.79 4.5 11.25v6.098c0 .621.504 1.125 1.125 1.125h3.375" />
@@ -587,5 +596,3 @@
     </script>
 </body>
 </html>
-
-
