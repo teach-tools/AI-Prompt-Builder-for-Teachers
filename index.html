@@ -546,7 +546,7 @@
                 subjectSelect.value = '';
                 topicTextarea.value = '';
                 detailsTextarea.value = '';
- Small-g, 
+ 
                 // Reset all conditional fields
                 document.querySelectorAll('.task-options input[type="text"]').forEach(el => el.value = '');
                 document.querySelectorAll('.task-options input[type="number"]').forEach(el => el.value = '');
@@ -560,7 +560,7 @@
             });
 
             // Copy Button Logic
-            copyButton.addEventListener('click', ()S-l => {
+            copyButton.addEventListener('click', () => {
                 outputPrompt.select();
                 outputPrompt.setSelectionRange(0, 99999); // For mobile
                 try {
@@ -587,4 +587,5 @@
     </script>
 </body>
 </html>
+
 
