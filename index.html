@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Builder for Teachers</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font -->
+    <style>
+        html {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom focus-ring for accessibility and style */
+        select:focus, textarea:focus, input:focus, input[type="checkbox"]:focus {
+            --tw-ring-color: #2563eb; /* blue-600 */
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+            border-color: #2563eb; /* blue-600 */
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+        /* Minor style for optgroup */
+        optgroup {
+            font-weight: bold;
+            font-style: italic;
+            color: #1d4ed8; /* blue-800 */
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        /* Style for the generated content to respect whitespace */
+        .generated-content-area {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.5; /* leading-relaxed */
+        }
+        /* Modal styles */
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        .modal-content {
+            transition: transform 0.25s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-inter min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-blue-700">
+                Teacher's AI Prompt Builder
+            </h1>
+            <p class="text-sm text-gray-600 mt-1">Select options to craft the perfect prompt for your needs.</p>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- Left Column: Form / Controls -->
+            <div class="bg-white p-6 rounded-lg shadow-lg space-y-6">
+                
+                <!-- Task Selector -->
+                <div>
+                    <label for="task" class="block text-sm font-medium text-gray-900">What do you want to create?</label>
+                    <select id="task" name="task" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">-- Select a generator --</option>
+                        <optgroup label="Generators">
+                            <option value="assessment-generator">Assessment Generator</option>
+                            <option value="lesson-designer">Lesson Designer</option>
+                            <option value="exit-ticket-generator">Exit Ticket Generator</option>
+                            <option value="bell-ringer-creator">Class Starter / Bell Ringer</option>
+                            <option value="differentiation-builder">Differentiation Builder</option>
+                        </optgroup>
+                        <optgroup label="Other Tools">
+                            <option value="writing-prompt">Student Writing Prompt</option>
+                            <option value="explanation">Concept Explanation</option>
+                            <option value="email">Email to a Parent/Guardian</option>
+                            <option value="rubric">Grading Rubric</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <!-- ----- CONDITIONAL OPTIONS BLOCKS ----- -->
+                <!-- These are hidden by default and shown based on #task selection -->
+
+                <!-- Assessment Generator Options -->
+                <div id="assessment-options" class="task-options hidden space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                    <h3 class="font-medium text-gray-800">Assessment Options</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="assess-num-questions" class="block text-sm font-medium text-gray-700"># of Questions</label>
+                            <input type="number" id="assess-num-questions" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="e.g., 5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">DOK Levels</label>
+                            <div class="mt-2 grid grid-cols-2 gap-x-4 gap-y-2">
+                                <div class="flex items-center"><input id="dok-a-1" type="checkbox" value="DOK 1" class="assess-dok-type h-4 w-4 rounded"><label for="dok-a-1" class="ml-2 text-sm">DOK 1</label></div>
+                                <div class="flex items-center"><input id="dok-a-2" type="checkbox" value="DOK 2" class="assess-dok-type h-4 w-4 rounded"><label for="dok-a-2" class="ml-2 text-sm">DOK 2</label></div>
+                                <div class="flex items-center"><input id="dok-a-3" type="checkbox" value="DOK 3" class="assess-dok-type h-4 w-4 rounded"><label for="dok-a-3" class="ml-2 text-sm">DOK 3</label></div>
+                                <div class="flex items-center"><input id="dok-a-4" type="checkbox" value="DOK 4" class="assess-dok-type h-4 w-4 rounded"><label for="dok-a-4" class="ml-2 text-sm">DOK 4</label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Question Types</label>
+                        <div class="mt-2 grid grid-cols-2 gap-3">
+                            <div class="flex items-center"><input id="qt-mc" type="checkbox" value="Multiple Choice" class="assess-q-type h-4 w-4 rounded"><label for="qt-mc" class="ml-2 text-sm">Multiple Choice</label></div>
+                            <div class="flex items-center"><input id="qt-multi" type="checkbox" value="Multi-select" class="assess-q-type h-4 w-4 rounded"><label for="qt-multi" class="ml-2 text-sm">Multi-selection</label></div>
+                            <div class="flex items-center"><input id="qt-tf" type="checkbox" value="True/False" class="assess-q-type h-4 w-4 rounded"><label for="qt-tf" class="ml-2 text-sm">True/False</label></div>
+                            <div class="flex items-center"><input id="qt-short" type="checkbox" value="Short Response" class="assess-q-type h-4 w-4 rounded"><label for="qt-short" class="ml-2 text-sm">Short Response</label></div>
+                            <div class="flex items-center"><input id="qt-match" type="checkbox" value="Matching" class="assess-q-type h-4 w-4 rounded"><label for="qt-match" class="ml-2 text-sm">Matching</label></div>
+                            <div class="flex items-center"><input id="qt-seq" type="checkbox" value="Resequence" class="assess-q-type h-4 w-4 rounded"><label for="qt-seq" class="ml-2 text-sm">Resequence</label></div>
+                            <div class="flex items-center"><input id="qt-cer" type="checkbox" value="CER-style assessment" class="assess-q-type h-4 w-4 rounded"><label for="qt-cer" class="ml-2 text-sm">CER-style</label></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="assess-answer-key" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <label for="assess-answer-key" class="ml-2 block text-sm text-gray-700">Include Answer Key</label>
+                    </div>
+                </div>
+
+                <!-- Lesson Designer Options -->
+                <div id="lesson-options" class="task-options hidden space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                    <h3 class="font-medium text-gray-800">Lesson Designer Options</h3>
+                    <div>
+                        <label for="lesson-length" class="block text-sm font-medium text-gray-700">Class Length</label>
+                        <input type="text" id="lesson-length" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="e.g., 50 minutes, 90-minute block">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Lesson Structure</label>
+                        <div class="mt-2 grid grid-cols-2 gap-3">
+                            <div class="flex items-center"><input id="ls-warmup" type="checkbox" value="Warm-up" class="lesson-structure h-4 w-4 rounded"><label for="ls-warmup" class="ml-2 text-sm">Warm-up</label></div>
+                            <div class="flex items-center"><input id="ls-model" type="checkbox" value="Modeling (I Do)" class="lesson-structure h-4 w-4 rounded"><label for="ls-model" class="ml-2 text-sm">Modeling</label></div>
+                            <div class="flex items-center"><input id="ls-guided" type="checkbox" value="Guided Practice (We Do)" class="lesson-structure h-4 w-4 rounded"><label for="ls-guided" class="ml-2 text-sm">Guided Practice</label></div>
+                            <div class="flex items-center"><input id="ls-ind" type="checkbox" value="Independent Practice (You Do)" class="lesson-structure h-4 w-4 rounded"><label for="ls-ind" class="ml-2 text-sm">Independent</label></div>
+                            <div class="flex items-center"><input id="ls-exit" type="checkbox" value="Exit Ticket" class="lesson-structure h-4 w-4 rounded"><label for="ls-exit" class="ml-2 text-sm">Exit Ticket</label></div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="lesson-diff-level" class="block text-sm font-medium text-gray-700">Differentiation Level</label>
+                        <select id="lesson-diff-level" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
+                            <option value="">-- Select --</option>
+                            <option value="a brief suggestion for differentiation">Basic suggestion</option>
+                            <option value="detailed tiered activities for 'below', 'on', and 'above' level students">Detailed 3-level tiers</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Exit Ticket Generator Options -->
+                <div id="exit-ticket-options" class="task-options hidden space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                    <h3 class="font-medium text-gray-800">Exit Ticket Options</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="et-num-prompts" class="block text-sm font-medium text-gray-700"># of Prompts</label>
+                            <input type="number" id="et-num-prompts" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="e.g., 3">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">DOK Levels</label>
+                            <div class="mt-2 grid grid-cols-2 gap-x-4 gap-y-2">
+                                <div class="flex items-center"><input id="dok-e-1" type="checkbox" value="DOK 1" class="et-dok-type h-4 w-4 rounded"><label for="dok-e-1" class="ml-2 text-sm">DOK 1</label></div>
+                                <div class="flex items-center"><input id="dok-e-2" type="checkbox" value="DOK 2" class="et-dok-type h-4 w-4 rounded"><label for="dok-e-2" class="ml-2 text-sm">DOK 2</label></div>
+                                <div class="flex items-center"><input id="dok-e-3" type="checkbox" value="DOK 3" class="et-dok-type h-4 w-4 rounded"><label for="dok-e-3" class="ml-2 text-sm">DOK 3</label></div>
+                                <div class="flex items-center"><input id="dok-e-4" type="checkbox" value="DOK 4" class="et-dok-type h-4 w-4 rounded"><label for="dok-e-4" class="ml-2 text-sm">DOK 4</label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Format</label>
+                        <div class="mt-2 grid grid-cols-2 gap-3">
+                            <div class="flex items-center"><input id="et-mc" type="checkbox" value="Multiple Choice" class="et-format h-4 w-4 rounded"><label for="et-mc" class="ml-2 text-sm">Multiple Choice</label></div>
+                            <div class="flex items-center"><input id="et-short" type="checkbox" value="Short Answer" class="et-format h-4 w-4 rounded"><label for="et-short" class="ml-2 text-sm">Short Answer</label></div>
+                            <div class="flex items-center"><input id="et-reflect" type="checkbox" value="Reflection" class="et-format h-4 w-4 rounded"><label for="et-reflect" class="ml-2 text-sm">Reflection</label></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bell Ringer Creator Options -->
+                <div id="bell-ringer-options" class="task-options hidden space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                    <h3 class="font-medium text-gray-800">Bell Ringer Options</h3>
+                    <div>
+                        <label for="br-num-activities" class="block text-sm font-medium text-gray-700"># of Activities</label>
+                        <input type="number" id="br-num-activities" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="e.g., 3">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Purpose</label>
+                        <div class="mt-2 grid grid-cols-2 gap-3">
+                            <div class="flex items-center"><input id="br-review" type="checkbox" value="Review past material" class="br-purpose h-4 w-4 rounded"><label for="br-review" class="ml-2 text-sm">Review</label></div>
+                            <div class="flex items-center"><input id="br-engage" type="checkbox" value="Engage with new topic" class="br-purpose h-4 w-4 rounded"><label for="br-engage" class="ml-2 text-sm">Engagement</label></div>
+                            <div class="flex items-center"><input id="br-p-know" type="checkbox" value="Activate prior knowledge" class="br-purpose h-4 w-4 rounded"><label for="br-p-know" class="ml-2 text-sm">Prior Knowledge</label></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Differentiation Builder Options -->
+                <div id="differentiation-options" class="task-options hidden space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                    <h3 class="font-medium text-gray-800">Differentiation Options</h3>
+                    <div>
+                        <label for="diff-activity-type" class="block text-sm font-medium text-gray-700">Type of Activity</label>
+                        <select id="diff-activity-type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
+                            <option value="">-- Select --</option>
+                            <option value="Discussion questions">Discussion</option>
+                            <option value="Analysis task">Analysis</option>
+                            <option value="Writing prompt">Writing</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="diff-output-format" class="block text-sm font-medium text-gray-700">Output Format</label>
+                        <select id="diff-output-format" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
+                            <option value="">-- Select --</option>
+                            <option value="a table">Table</option>
+                            <option value="three distinct sections">Sectioned</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ----- END CONDITIONAL BLOCKS ----- -->
+
+                <!-- ----- GLOBAL OPTIONS ----- -->
+
+                <!-- Subject Selector (Global) -->
+                <div>
+                    <label for="subject-select" class="block text-sm font-medium text-gray-900">Subject</label>
+                    <select id="subject-select" name="subject-select" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">-- Select a subject --</option>
+                        <optgroup label="Core Academic">
+                            <option value="English / Language Arts">English / Language Arts</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Science">Science</option>
+                            <option value="Social Studies / History">Social Studies / History</option>
+                        </optgroup>
+                        <optgroup label="STEM & Applied">
+                            <option value="Computer Science / Technology">Computer Science / Technology</option>
+                            <option value="Humanities & Arts">Humanities & Arts</option>
+                            <option value="Performing Arts / Music / Theater">Performing Arts / Music / Theater</option>
+                            <option value="World Languages">World Languages</option>
+                            <option value="Media & Journalism">Media & Journalism</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <!-- Grade Level Selector (Global) -->
+                <div>
+                    <label for="hs-grade-level" class="block text-sm font-medium text-gray-900">High School Grade Level</label>
+                    <select id="hs-grade-level" name="hs-grade-level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">-- Select a grade level --</option>
+                        <option value="Grade 9">Grade 9</option>
+                        <option value="Grade 10">Grade 10</option>
+                        <option value="Grade 11">Grade 11</option>
+                        <option value="Grade 12">Grade 12</option>
+                        <option value="All High School (9-12)">All High School (9-12)</option>
+                    </select>
+                </div>
+
+                <!-- Reading Level Selector (Global) -->
+                <div>
+                    <label for="reading-level" class="block text-sm font-medium text-gray-900">Reading Level</label>
+                    <select id="reading-level" name="reading-level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">-- Select a reading level --</option>
+                        <option value="Middle School (6-8) reading level with moderate complexity and grade-level syntax">Middle School (6–8): Moderate complexity</option>
+                        <option value="High School (9-10) reading level with typical text complexity for general ed">High School (9–10): Typical complexity</option>
+                        <option value="Advanced (11-12) reading level with more abstract reasoning and complex texts">Advanced (11–12): Abstract reasoning</option>
+                        <option value="College-Level reading level with extended argumentation and dense vocabulary">College-Level: Dense vocabulary</option>
+                    </select>
+                </div>
+
+                <!-- Topic/Subject (Global) -->
+                <div>
+                    <label for="topic" class="block text-sm font-medium text-gray-900">Topic / Skill / Text</label>
+                    <textarea id="topic" name="topic" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Mitosis, The Great Gatsby Ch. 3, Citing evidence"></textarea>
+                </div>
+
+                <!-- Specific Details (Global) -->
+                <div>
+                    <label for="details" class="block text-sm font-medium text-gray-900">Specific Details & Constraints</label>
+                    <textarea id="details" name="details" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Include a real-world example. The tone should be encouraging. Keep it under 150 words."></textarea>
+                </div>
+
+                <!-- Clear Button -->
+                <button id="clear-button" class="w-full justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    Clear All
+                </button>
+
+            </div>
+
+            <!-- Right Column: Output -->
+            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-6">
+                <!-- Prompt Box -->
+                <div>
+                    <label for="output-prompt" class="block text-sm font-medium text-gray-900">Generated Prompt</label>
+                    <textarea id="output-prompt" readonly rows="8" class="flex-grow mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 font-mono text-sm text-gray-800 p-4 focus:ring-blue-500 focus:border-blue-500" placeholder="Your generated prompt will appear here..."></textarea>
+                    
+                    <button id="copy-button" class="mt-4 w-full inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <!-- SVG Copy Icon -->
+                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25c0-1.242-.93-2.25-2.06-2.25H9.56c-1.13 0-2.06.918-2.06 2.25v9c0 1.242.93 2.25 2.06 2.25h4.88c1.13 0 2.06-.918 2.06-2.25v-9z M12 15.75h.007v.008H12v-.008z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75h4.5v1.5h-4.5z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75c-.621 0-1.125-.504-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.46-7.5-8.46S4.5 6.79 4.5 11.25v6.098c0 .621.504 1.125 1.125 1.125h3.375" />
+                        </svg>
+                        Copy Prompt
+                    </button>
+
+                    <!-- ✨ New Gemini API Button -->
+                    <button id="generate-content-button" class="mt-4 w-full inline-flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.475-2.475L14.25 6l1.035-.259a3.375 3.375 0 002.475-2.475L18 2.25l.259 1.035a3.375 3.375 0 002.475 2.475L21.75 6l-1.035.259a3.375 3.375 0 00-2.475 2.475z" />
+                        </svg>
+                        ✨ Generate Content
+                    </button>
+                </div>
+
+                <!-- Generated Content Box -->
+                <div class="flex-grow">
+                    <label for="generated-content" class="block text-sm font-medium text-gray-900">Generated Content</label>
+                    <div id="generated-content-container" class="mt-1 block w-full h-96 min-h-[24rem] rounded-md border border-gray-300 shadow-sm bg-gray-50 p-4 overflow-y-auto">
+                        <div id="generated-content-placeholder" class="text-gray-500">Click "✨ Generate Content" to see the AI's response here...</div>
+                        <div id="generated-content-output" class="generated-content-area hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Container -->
+    <div id="modal-backdrop" class="modal fixed inset-0 bg-gray-900 bg-opacity-50 z-40 flex items-center justify-center p-4 hidden opacity-0">
+        <div id="modal-content" class="modal-content bg-white rounded-lg shadow-xl p-6 w-full max-w-md scale-95 transform">
+            <!-- Modal content is injected here by JS -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Get All DOM Elements ---
+
+            // Global Controls
+            const taskSelect = document.getElementById('task');
+            const hsGradeLevelSelect = document.getElementById('hs-grade-level');
+            const readingLevelSelect = document.getElementById('reading-level');
+            const subjectSelect = document.getElementById('subject-select');
+            const topicTextarea = document.getElementById('topic');
+            const detailsTextarea = document.getElementById('details');
+            const outputPrompt = document.getElementById('output-prompt');
+            const copyButton = document.getElementById('copy-button');
+            const clearButton = document.getElementById('clear-button');
+
+            // Conditional Option Blocks
+            const allOptionBlocks = document.querySelectorAll('.task-options');
+            
+            // Assessment Options
+            const assessmentOptions = document.getElementById('assessment-options');
+            const assessNumQuestions = document.getElementById('assess-num-questions');
+            const assessDokCheckboxes = document.querySelectorAll('.assess-dok-type');
+            const assessQuestionTypes = document.querySelectorAll('.assess-q-type');
+            const assessAnswerKey = document.getElementById('assess-answer-key');
+            
+            // Lesson Designer Options
+            const lessonOptions = document.getElementById('lesson-options');
+            const lessonLength = document.getElementById('lesson-length');
+            const lessonStructureCheckboxes = document.querySelectorAll('.lesson-structure');
+            const lessonDiffLevel = document.getElementById('lesson-diff-level');
+
+            // Exit Ticket Options
+            const exitTicketOptions = document.getElementById('exit-ticket-options');
+            const etNumPrompts = document.getElementById('et-num-prompts');
+            const etDokCheckboxes = document.querySelectorAll('.et-dok-type');
+            const etFormatCheckboxes = document.querySelectorAll('.et-format');
+            
+            // Bell Ringer Options
+            const bellRingerOptions = document.getElementById('bell-ringer-options');
+            const brNumActivities = document.getElementById('br-num-activities');
+            const brPurposeCheckboxes = document.querySelectorAll('.br-purpose');
+
+            // Differentiation Options
+            const differentiationOptions = document.getElementById('differentiation-options');
+            const diffActivityType = document.getElementById('diff-activity-type');
+            const diffOutputFormat = document.getElementById('diff-output-format');
+
+            // --- New Gemini API Elements ---
+            const generateContentButton = document.getElementById('generate-content-button');
+            const generatedContentContainer = document.getElementById('generated-content-container');
+            const generatedContentPlaceholder = document.getElementById('generated-content-placeholder');
+            const generatedContentOutput = document.getElementById('generated-content-output');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContent = document.getElementById('modal-content');
+
+            // --- 2. Helper Functions ---
+
+            // Helper to get checked values from a list of checkboxes
+            function getCheckedValues(selector) {
+                return Array.from(document.querySelectorAll(selector))
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.value);
+            }
+            
+            // Helper to join an array of strings into a nice list
+            function formatList(arr) {
+                if (arr.length === 0) return '';
+                if (arr.length === 1) return arr[0];
+                if (arr.length === 2) return arr.join(' and ');
+                return arr.slice(0, -1).join(', ') + ', and ' + arr.slice(-1);
+            }
+
+            // --- New Modal Functions ---
+            function showModal(title, message, buttonText = 'Close') {
+                modalContent.innerHTML = `
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">${title}</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">${message}</p>
+                    </div>
+                    <div class="mt-4">
+                        <button type="button" id="modal-close-button" class="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            ${buttonText}
+                        </button>
+                    </div>
+                `;
+                modalBackdrop.classList.remove('hidden');
+                setTimeout(() => {
+                    modalBackdrop.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                }, 10); // Start transition
+
+                document.getElementById('modal-close-button').onclick = hideModal;
+            }
+
+            function showLoadingModal() {
+                modalContent.innerHTML = `
+                    <div class="flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">Generating Content...</h3>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">Please wait. This may take a moment.</p>
+                    </div>
+                `;
+                modalBackdrop.classList.remove('hidden');
+                setTimeout(() => {
+                    modalBackdrop.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                }, 10);
+            }
+
+            function hideModal() {
+                modalBackdrop.classList.add('opacity-0');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    modalBackdrop.classList.add('hidden');
+                }, 250); // Wait for transition to end
+            }
+            
+            // --- 3. Core Prompt Generation (Unchanged) ---
+
+            function generatePrompt() {
+                // --- A. Show/Hide Conditional Options ---
+                allOptionBlocks.forEach(block => block.classList.add('hidden'));
+                
+                const task = taskSelect.value;
+                switch (task) {
+                    case 'assessment-generator':
+                        assessmentOptions.classList.remove('hidden');
+                        break;
+                    case 'lesson-designer':
+                        lessonOptions.classList.remove('hidden');
+                        break;
+                    case 'exit-ticket-generator':
+                        exitTicketOptions.classList.remove('hidden');
+                        break;
+                    case 'bell-ringer-creator':
+                        bellRingerOptions.classList.remove('hidden');
+                        break;
+                    case 'differentiation-builder':
+                        differentiationOptions.classList.remove('hidden');
+                        break;
+                }
+
+                // --- B. Get Global Values ---
+                const grade = hsGradeLevelSelect.value || 'high school';
+                const reading = readingLevelSelect.value;
+                const subject = subjectSelect.value;
+                const topic = topicTextarea.value.trim();
+                const details = detailsTextarea.value.trim();
+ 
+                let prompt = `Act as an expert, creative, and helpful ${grade} ${subject ? subject : ''} educator. `;
+                
+                // --- C. Build Task-Specific Prompt ---
+                switch (task) {
+                    case '':
+                        outputPrompt.value = "Select a generator from the list to begin...";
+                        return;
+
+                    case 'assessment-generator':
+                        prompt += `Generate an assessment for ${grade} ${subject ? subject : ''} students. `;
+                        if (topic) prompt += `The topic is "${topic}". `;
+                        
+                        const numQuestions = assessNumQuestions.value;
+                        if (numQuestions) prompt += `Create ${numQuestions} questions. `;
+                        
+                        const dokTypes = getCheckedValues('.assess-dok-type');
+                        if (dokTypes.length > 0) prompt += `Questions should target the following levels: ${formatList(dokTypes)}. `;
+                        
+                        const qTypes = getCheckedValues('.assess-q-type');
+                        if (qTypes.length > 0) prompt += `Include the following question types: ${formatList(qTypes)}. `;
+                        
+                        if (reading) prompt += `The reading level should be: ${reading}. `;
+                        
+                        if (assessAnswerKey.checked) prompt += `Provide a detailed answer key for all questions. `;
+                        
+                        prompt += "Format the quiz as a simple, clean, ready-to-print document. Do not include any extra commentary, just the questions and (if requested) the answer key. The output should be easily copy-pasted into another program or document. ";
+                        break;
+
+                    case 'lesson-designer':
+                        prompt += `Design a detailed lesson plan for a ${grade} ${subject ? subject : ''} class. `;
+                        if (topic) prompt += `The topic is "${topic}". `;
+
+                        const len = lessonLength.value.trim();
+                        if (len) prompt += `The class period is ${len}. `;
+
+                        const structure = getCheckedValues('.lesson-structure');
+                        if (structure.length > 0) prompt += `The lesson must include these components: ${formatList(structure)}. `;
+
+                        const diff = lessonDiffLevel.value;
+                        if (diff) prompt += `For differentiation, provide ${diff}. `;
+                        
+                        if (reading) prompt += `All student-facing materials should be at a ${reading}. `;
+                        break;
+
+                    case 'exit-ticket-generator':
+                        prompt += `Generate a short formative check for understanding (exit ticket) for ${grade} ${subject ? subject : ''} students. `;
+                        if (topic) prompt += `The topic is "${topic}". `;
+ 
+                        const numPrompts = etNumPrompts.value;
+                        if (numPrompts) prompt += `Produce ${numPrompts} prompts. `;
+
+                        const etDokTypes = getCheckedValues('.et-dok-type');
+                        if (etDokTypes.length > 0) prompt += `The prompts should target the following levels: ${formatList(etDokTypes)}. `;
+
+                        const etFormats = getCheckedValues('.et-format');
+                        if (etFormats.length > 0) prompt += `Use the following formats: ${formatList(etFormats)}. `;
+                        
+                        if (reading) prompt += `The reading level should be: ${reading}. `;
+                        break;
+
+                    case 'bell-ringer-creator':
+                        prompt += `Generate an engaging 5-10 minute class starter (bell ringer) for ${grade} ${subject ? subject : ''} students. `;
+                        if (topic) prompt += `The topic/skill focus is "${topic}". `;
+
+                        const numActivities = brNumActivities.value;
+                        if (numActivities) prompt += `Generate ${numActivities} different activity options. `;
+
+                        const purposes = getCheckedValues('.br-purpose');
+                        if (purposes.length > 0) prompt += `The purpose of the opener should be to: ${formatList(purposes)}. `;
+                        
+                        if (reading) prompt += `The reading level should be: ${reading}. `;
+                        break;
+
+                    case 'differentiation-builder':
+                        prompt += `Create a tiered differentiation task for ${grade} ${subject ? subject : ''} students. `;
+                        if (topic) prompt += `The core text or concept is "${topic}". `;
+
+                        const activityType = diffActivityType.value;
+                        if (activityType) prompt += `The activity type is: ${activityType}. `;
+
+                        prompt += `Create versions for "below level", "on level", and "above level" students. `;
+                        
+                        if (reading) prompt += `The "on level" tier should use a ${reading}. Adjust the other tiers accordingly. `;
+
+                        const outputFormat = diffOutputFormat.value;
+                        if (outputFormat) prompt += `Present the output as ${outputFormat}. `;
+                        break;
+
+                    // Fallback for simpler tools
+                    case 'writing-prompt':
+                        prompt += `Create an engaging and creative writing prompt for ${grade} ${subject ? subject : ''} students. `;
+                        if (topic) prompt += `The prompt should be about "${topic}". `;
+                        if (reading) prompt += `The prompt should be written at a ${reading}. `;
+                        break;
+                    case 'explanation':
+                        prompt += `Explain a concept in a clear, age-appropriate way for a ${grade} ${subject ? subject : ''} student. `;
+                        if (topic) prompt += `The concept is "${topic}". `;
+                        if (reading) prompt += `The explanation should be at a ${reading}. `;
+                        break;
+                    case 'email':
+                        prompt += `Write a professional and empathetic email to a parent. `;
+                        if (topic) prompt += `The email is regarding "${topic}". `;
+                        break;
+                    case 'rubric':
+                        prompt += `Develop a detailed grading rubric. `;
+                        if (topic) prompt += `The rubric is for an assignment on "${topic}". `;
+                        break;
+                }
+
+                // --- D. Add Global Details and Finalize ---
+                if (details) {
+                    prompt += `\n\nADDITIONAL REQUIREMENTS: ${details}`;
+                }
+                
+                if (task) {
+                     prompt += `\n\nPlease ensure the response is high-quality, well-structured, and directly addresses all parts of this request.`;
+                }
+
+                outputPrompt.value = prompt.trim();
+            }
+
+            // --- 4. Event Listeners ---
+
+            // Create a single list of all interactive elements
+            const allInputs = [
+                taskSelect, hsGradeLevelSelect, readingLevelSelect, subjectSelect, topicTextarea, detailsTextarea,
+                assessNumQuestions, assessAnswerKey,
+                lessonLength, lessonDiffLevel,
+                etNumPrompts,
+                brNumActivities,
+                diffActivityType, diffOutputFormat,
+                ...assessDokCheckboxes, ...etDokCheckboxes,
+                ...assessQuestionTypes, ...lessonStructureCheckboxes, ...etFormatCheckboxes, ...brPurposeCheckboxes
+            ];
+ 
+            // Add event listeners to all inputs to update on change
+            allInputs.forEach(input => {
+                input.addEventListener('input', generatePrompt);
+                input.addEventListener('change', generatePrompt); // for <select> and checkboxes
+            });
+
+            // Clear Button Logic
+            clearButton.addEventListener('click', () => {
+                // Reset all global fields
+                taskSelect.value = '';
+                hsGradeLevelSelect.value = '';
+                readingLevelSelect.value = '';
+                subjectSelect.value = '';
+                topicTextarea.value = '';
+                detailsTextarea.value = '';
+ 
+                // Reset all conditional fields
+                document.querySelectorAll('.task-options input[type="text"]').forEach(el => el.value = '');
+                document.querySelectorAll('.task-options input[type="number"]').forEach(el => el.value = '');
+                document.querySelectorAll('.task-options select').forEach(el => el.value = '');
+                document.querySelectorAll('.task-options input[type="checkbox"]').forEach(el => el.checked = false);
+                
+                // Clear output
+                generatedContentOutput.textContent = '';
+                generatedContentOutput.classList.add('hidden');
+                generatedContentPlaceholder.classList.remove('hidden');
+
+                generatePrompt(); // Update the prompt and hide all conditional blocks
+            });
+
+            // Copy Button Logic
+            copyButton.addEventListener('click', () => {
+                outputPrompt.select();
+                outputPrompt.setSelectionRange(0, 99999); // For mobile
+                try {
+                    document.execCommand('copy');
+                    const originalText = copyButton.innerHTML;
+                    copyButton.innerHTML = `
+                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        Copied!
+                    `;
+                    setTimeout(() => { copyButton.innerHTML = originalText; }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                }
+                window.getSelection().removeAllRanges();
+            });
+
+            // --- 5. New Gemini API Call Logic ---
+
+            /**
+             * Calls the Gemini API with exponential backoff.
+             * @param {string} userQuery The prompt to send to the API.
+             * @param {number} maxRetries Maximum number of retries.
+             * @returns {Promise<string>} The generated text.
+             */
+            async function callGeminiApi(userQuery, maxRetries = 5) {
+                const apiKey = ""; // API key is handled by the environment
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                };
+
+                let delay = 1000; // Start with 1 second delay
+                for (let i = 0; i <= maxRetries; i++) {
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            if (response.status === 429 || response.status >= 500) {
+                                // Throttling or server error, so retry
+                                throw new Error(`API Error: ${response.status}`);
+                            } else {
+                                // Client-side error (e.g., 400), don't retry
+                                const errorResult = await response.json();
+                                throw new Error(errorResult.error?.message || 'Failed to get content.');
+                            }
+                        }
+
+                        const result = await response.json();
+                        const candidate = result.candidates?.[0];
+
+                        if (candidate && candidate.content?.parts?.[0]?.text) {
+                            return candidate.content.parts[0].text;
+                        } else {
+                            throw new Error('No content generated or unexpected response format.');
+                        }
+
+                    } catch (error) {
+                        console.error(`Attempt ${i + 1} failed:`, error.message);
+                        if (i === maxRetries) {
+                            // Max retries reached
+                            throw error; // Re-throw the last error
+                        }
+                        if (error.message.includes('400')) {
+                            // Don't retry on bad request
+                            throw new Error('There was an issue with the request (400).');
+                        }
+                        // Wait for the delay and then continue to the next iteration
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2; // Exponential backoff
+                    }
+                }
+            }
+
+
+            // Generate Content Button Logic
+            generateContentButton.addEventListener('click', async () => {
+                const prompt = outputPrompt.value;
+                if (!prompt || prompt === "Select a generator from the list to begin...") {
+                    showModal('No Prompt', 'Please select a generator and fill in the options to create a prompt first.');
+                    return;
+                }
+
+                // Show loading state
+                showLoadingModal();
+                generatedContentPlaceholder.classList.add('hidden');
+                generatedContentOutput.classList.add('hidden');
+
+                try {
+                    const generatedText = await callGeminiApi(prompt);
+                    
+                    // Success: Display content
+                    hideModal();
+                    generatedContentOutput.textContent = generatedText; // Use textContent to prevent XSS
+                    generatedContentOutput.classList.remove('hidden');
+
+                } catch (error) {
+                    // Failure: Show error modal
+                    console.error('Failed to generate content:', error);
+                    hideModal();
+                    showModal('Error', `Failed to generate content. Please try again. \n(${error.message})`);
+                    generatedContentPlaceholder.classList.remove('hidden');
+                }
+            });
+
+            // Initial call to set the placeholder text
+            generatePrompt();
+        });
+    </script>
+</body>
+</html>
+
