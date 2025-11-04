@@ -28,21 +28,6 @@
             color: #1d4ed8; /* blue-800 */
             background-color: #f3f4f6; /* gray-100 */
         }
-        /* Style for the generated content to respect whitespace */
-        .generated-content-area {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.875rem; /* text-sm */
-            line-height: 1.5; /* leading-relaxed */
-        }
-        /* Modal styles */
-        .modal {
-            transition: opacity 0.25s ease;
-        }
-        .modal-content {
-            transition: transform 0.25s ease;
-        }
     </style>
 </head>
 <body class="bg-gray-50 font-inter min-h-screen">
@@ -301,34 +286,15 @@
                         </svg>
                         Copy Prompt
                     </button>
-
-                    <!-- ✨ New Gemini API Button -->
-                    <button id="generate-content-button" class="mt-4 w-full inline-flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.475-2.475L14.25 6l1.035-.259a3.375 3.375 0 002.475-2.475L18 2.25l.259 1.035a3.375 3.375 0 002.475 2.475L21.75 6l-1.035.259a3.375 3.375 0 00-2.475 2.475z" />
-                        </svg>
-                        ✨ Generate Content
-                    </button>
                 </div>
 
-                <!-- Generated Content Box -->
-                <div class="flex-grow">
-                    <label for="generated-content" class="block text-sm font-medium text-gray-900">Generated Content</label>
-                    <div id="generated-content-container" class="mt-1 block w-full h-96 min-h-[24rem] rounded-md border border-gray-300 shadow-sm bg-gray-50 p-4 overflow-y-auto">
-                        <div id="generated-content-placeholder" class="text-gray-500">Click "✨ Generate Content" to see the AI's response here...</div>
-                        <div id="generated-content-output" class="generated-content-area hidden"></div>
-                    </div>
-                </div>
+                <!-- Removed "Generate Content" button and "Generated Content Box" -->
+                
             </div>
         </div>
     </main>
 
-    <!-- Modal Container -->
-    <div id="modal-backdrop" class="modal fixed inset-0 bg-gray-900 bg-opacity-50 z-40 flex items-center justify-center p-4 hidden opacity-0">
-        <div id="modal-content" class="modal-content bg-white rounded-lg shadow-xl p-6 w-full max-w-md scale-95 transform">
-            <!-- Modal content is injected here by JS -->
-        </div>
-    </div>
+    <!-- Removed Modal Container -->
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -377,13 +343,7 @@
             const diffActivityType = document.getElementById('diff-activity-type');
             const diffOutputFormat = document.getElementById('diff-output-format');
 
-            // --- New Gemini API Elements ---
-            const generateContentButton = document.getElementById('generate-content-button');
-            const generatedContentContainer = document.getElementById('generated-content-container');
-            const generatedContentPlaceholder = document.getElementById('generated-content-placeholder');
-            const generatedContentOutput = document.getElementById('generated-content-output');
-            const modalBackdrop = document.getElementById('modal-backdrop');
-            const modalContent = document.getElementById('modal-content');
+            // --- Removed Gemini API Elements ---
 
             // --- 2. Helper Functions ---
 
@@ -402,55 +362,7 @@
                 return arr.slice(0, -1).join(', ') + ', and ' + arr.slice(-1);
             }
 
-            // --- New Modal Functions ---
-            function showModal(title, message, buttonText = 'Close') {
-                modalContent.innerHTML = `
-                    <h3 class="text-lg font-medium leading-6 text-gray-900">${title}</h3>
-                    <div class="mt-2">
-                        <p class="text-sm text-gray-500">${message}</p>
-                    </div>
-                    <div class="mt-4">
-                        <button type="button" id="modal-close-button" class="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            ${buttonText}
-                        </button>
-                    </div>
-                `;
-                modalBackdrop.classList.remove('hidden');
-                setTimeout(() => {
-                    modalBackdrop.classList.remove('opacity-0');
-                    modalContent.classList.remove('scale-95');
-                }, 10); // Start transition
-
-                document.getElementById('modal-close-button').onclick = hideModal;
-            }
-
-            function showLoadingModal() {
-                modalContent.innerHTML = `
-                    <div class="flex items-center">
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <h3 class="text-lg font-medium leading-6 text-gray-900">Generating Content...</h3>
-                    </div>
-                    <div class="mt-2">
-                        <p class="text-sm text-gray-500">Please wait. This may take a moment.</p>
-                    </div>
-                `;
-                modalBackdrop.classList.remove('hidden');
-                setTimeout(() => {
-                    modalBackdrop.classList.remove('opacity-0');
-                    modalContent.classList.remove('scale-95');
-                }, 10);
-            }
-
-            function hideModal() {
-                modalBackdrop.classList.add('opacity-0');
-                modalContent.classList.add('scale-95');
-                setTimeout(() => {
-                    modalBackdrop.classList.add('hidden');
-                }, 250); // Wait for transition to end
-            }
+            // --- Removed Modal Functions ---
             
             // --- 3. Core Prompt Generation (Unchanged) ---
 
@@ -599,7 +511,7 @@
                 }
                 
                 if (task) {
-                     prompt += `\n\nPlease ensure the response is high-quality, well-structured, and directly addresses all parts of this request.`;
+                     prompt += `\n\nPlease ensure the response is high-quality, well-structured, and.`;
                 }
 
                 outputPrompt.value = prompt.trim();
@@ -634,7 +546,7 @@
                 subjectSelect.value = '';
                 topicTextarea.value = '';
                 detailsTextarea.value = '';
- 
+ Small-g, 
                 // Reset all conditional fields
                 document.querySelectorAll('.task-options input[type="text"]').forEach(el => el.value = '');
                 document.querySelectorAll('.task-options input[type="number"]').forEach(el => el.value = '');
@@ -642,15 +554,13 @@
                 document.querySelectorAll('.task-options input[type="checkbox"]').forEach(el => el.checked = false);
                 
                 // Clear output
-                generatedContentOutput.textContent = '';
-                generatedContentOutput.classList.add('hidden');
-                generatedContentPlaceholder.classList.remove('hidden');
+                // (Removed references to generated-content)
 
                 generatePrompt(); // Update the prompt and hide all conditional blocks
             });
 
             // Copy Button Logic
-            copyButton.addEventListener('click', () => {
+            copyButton.addEventListener('click', ()S-l => {
                 outputPrompt.select();
                 outputPrompt.setSelectionRange(0, 99999); // For mobile
                 try {
@@ -669,98 +579,7 @@
                 window.getSelection().removeAllRanges();
             });
 
-            // --- 5. New Gemini API Call Logic ---
-
-            /**
-             * Calls the Gemini API with exponential backoff.
-             * @param {string} userQuery The prompt to send to the API.
-             * @param {number} maxRetries Maximum number of retries.
-             * @returns {Promise<string>} The generated text.
-             */
-            async function callGeminiApi(userQuery, maxRetries = 5) {
-                const apiKey = ""; // API key is handled by the environment
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                
-                const payload = {
-                    contents: [{ parts: [{ text: userQuery }] }],
-                };
-
-                let delay = 1000; // Start with 1 second delay
-                for (let i = 0; i <= maxRetries; i++) {
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (!response.ok) {
-                            if (response.status === 429 || response.status >= 500) {
-                                // Throttling or server error, so retry
-                                throw new Error(`API Error: ${response.status}`);
-                            } else {
-                                // Client-side error (e.g., 400), don't retry
-                                const errorResult = await response.json();
-                                throw new Error(errorResult.error?.message || 'Failed to get content.');
-                            }
-                        }
-
-                        const result = await response.json();
-                        const candidate = result.candidates?.[0];
-
-                        if (candidate && candidate.content?.parts?.[0]?.text) {
-                            return candidate.content.parts[0].text;
-                        } else {
-                            throw new Error('No content generated or unexpected response format.');
-                        }
-
-                    } catch (error) {
-                        console.error(`Attempt ${i + 1} failed:`, error.message);
-                        if (i === maxRetries) {
-                            // Max retries reached
-                            throw error; // Re-throw the last error
-                        }
-                        if (error.message.includes('400')) {
-                            // Don't retry on bad request
-                            throw new Error('There was an issue with the request (400).');
-                        }
-                        // Wait for the delay and then continue to the next iteration
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        delay *= 2; // Exponential backoff
-                    }
-                }
-            }
-
-
-            // Generate Content Button Logic
-            generateContentButton.addEventListener('click', async () => {
-                const prompt = outputPrompt.value;
-                if (!prompt || prompt === "Select a generator from the list to begin...") {
-                    showModal('No Prompt', 'Please select a generator and fill in the options to create a prompt first.');
-                    return;
-                }
-
-                // Show loading state
-                showLoadingModal();
-                generatedContentPlaceholder.classList.add('hidden');
-                generatedContentOutput.classList.add('hidden');
-
-                try {
-                    const generatedText = await callGeminiApi(prompt);
-                    
-                    // Success: Display content
-                    hideModal();
-                    generatedContentOutput.textContent = generatedText; // Use textContent to prevent XSS
-                    generatedContentOutput.classList.remove('hidden');
-
-                } catch (error) {
-                    // Failure: Show error modal
-                    console.error('Failed to generate content:', error);
-                    hideModal();
-                    showModal('Error', `Failed to generate content. Please try again. \n(${error.message})`);
-                    generatedContentPlaceholder.classList.remove('hidden');
-                }
-            });
+            // --- 5. Removed Gemini API Call Logic ---
 
             // Initial call to set the placeholder text
             generatePrompt();
