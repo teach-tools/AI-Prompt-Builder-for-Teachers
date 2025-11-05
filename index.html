@@ -36,9 +36,6 @@
     <header class="bg-white shadow-sm">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <!-- 
-                  Logo image is now using the direct link
-                -->
                 <img id="school-logo" src="https://raw.githubusercontent.com/teach-tools/AI-Prompt-Builder-for-Teachers/97c3ea2a4ab0d33ddb3e0c812cfbb30250743699/lancer.png" alt="School Logo" class="h-12 w-12">
                 <div>
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
@@ -79,7 +76,6 @@
                 </div>
 
                 <!-- ----- CONDITIONAL OPTIONS BLOCKS ----- -->
-                <!-- These are hidden by default and shown based on #task selection -->
 
                 <!-- Assessment Generator Options -->
                 <div id="assessment-options" class="task-options hidden space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
@@ -211,8 +207,6 @@
                     </div>
                 </div>
 
-                <!-- ----- END CONDITIONAL BLOCKS ----- -->
-
                 <!-- ----- GLOBAL OPTIONS ----- -->
 
                 <!-- Subject Selector (Global) -->
@@ -281,28 +275,23 @@
             </div>
 
             <!-- Right Column: Output -->
-            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col space-y-6">
-                <!-- Prompt Box -->
-                <div>
-                    <label for="output-prompt" class="block text-sm font-medium text-gray-900">Generated Prompt</label>
-                    <textarea id="output-prompt" readonly rows="8" class="flex-grow mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 font-mono text-sm text-gray-800 p-4 focus:ring-amber-500 focus:border-amber-500" placeholder="Your generated prompt will appear here..."></textarea>
-                    
-                    <button id="copy-button" class="mt-4 w-full inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
-                        <!-- SVG Copy Icon -->
+            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+                
+                <div class="mb-3">
+                    <label for="output-prompt" class="block text-sm font-medium text-gray-900 mb-2">Complete Prompt (Copy & Paste)</label>
+                    <button id="copy-button" class="w-full inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
                         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25c0-1.242-.93-2.25-2.06-2.25H9.56c-1.13 0-2.06.918-2.06 2.25v9c0 1.242.93 2.25 2.06 2.25h4.88c1.13 0 2.06-.918 2.06-2.25v-9z M12 15.75h.007v.008H12v-.008z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75h4.5v1.5h-4.5z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75c-.621 0-1.125-.504-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.46-7.5-8.46S4.5 6.79 4.5 11.25v6.098c0 .621.504 1.125 1.125 1.125h3.375" />
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75c-.621 0-1.125-.504-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.46-7.5-8.46" />
                         </svg>
                         Copy Prompt
                     </button>
                 </div>
-
-                <!-- Removed "Generate Content" button and "Generated Content Box" -->
+                
+                <textarea id="output-prompt" readonly rows="20" class="block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 text-sm text-gray-800 p-4 focus:ring-amber-500 focus:border-amber-500 font-sans leading-relaxed" placeholder="Your generated prompt will appear here..."></textarea>
                 
             </div>
         </div>
     </main>
-
-    <!-- Removed Modal Container -->
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -351,8 +340,6 @@
             const diffActivityType = document.getElementById('diff-activity-type');
             const diffOutputFormat = document.getElementById('diff-output-format');
 
-            // --- Removed Gemini API Elements ---
-
             // --- 2. Helper Functions ---
 
             // Helper to get checked values from a list of checkboxes
@@ -369,10 +356,8 @@
                 if (arr.length === 2) return arr.join(' and ');
                 return arr.slice(0, -1).join(', ') + ', and ' + arr.slice(-1);
             }
-
-            // --- Removed Modal Functions ---
             
-            // --- 3. Core Prompt Generation (Unchanged) ---
+            // --- 3. Core Prompt Generation ---
 
             function generatePrompt() {
                 // --- A. Show/Hide Conditional Options ---
@@ -404,125 +389,163 @@
                 const topic = topicTextarea.value.trim();
                 const details = detailsTextarea.value.trim();
  
-                let prompt = `Act as an expert, creative, and helpful ${grade} ${subject ? subject : ''} educator. `;
+                // Build formatted prompt with sections
+                let prompt = '';
                 
-                // --- C. Build Task-Specific Prompt ---
-                switch (task) {
-                    case '':
-                        outputPrompt.value = "Select a generator from the list to begin...";
-                        return;
+                // ROLE section
+                prompt += 'ROLE\n';
+                prompt += `Act as an expert, creative, and helpful ${grade} ${subject ? subject : ''} educator.\n\n`;
+                
+                // --- C. Build Task-Specific Sections ---
+                if (!task) {
+                    outputPrompt.value = "Select a generator from the list to begin...";
+                    return;
+                }
 
+                let taskText = '';
+                const parameters = [];
+                let formatText = '';
+                
+                switch (task) {
                     case 'assessment-generator':
-                        prompt += `Generate an assessment for ${grade} ${subject ? subject : ''} students. `;
-                        if (topic) prompt += `The topic is "${topic}". `;
+                        taskText = `Generate an assessment for ${grade} ${subject ? subject : ''} students`;
+                        if (topic) taskText += ` on the topic of "${topic}"`;
+                        taskText += '.';
                         
                         const numQuestions = assessNumQuestions.value;
-                        if (numQuestions) prompt += `Create ${numQuestions} questions. `;
+                        if (numQuestions) parameters.push(`${numQuestions} questions`);
                         
                         const dokTypes = getCheckedValues('.assess-dok-type');
-                        if (dokTypes.length > 0) prompt += `Questions should target the following levels: ${formatList(dokTypes)}. `;
+                        if (dokTypes.length > 0) parameters.push(`DOK levels: ${formatList(dokTypes)}`);
                         
                         const qTypes = getCheckedValues('.assess-q-type');
-                        if (qTypes.length > 0) prompt += `Include the following question types: ${formatList(qTypes)}. `;
+                        if (qTypes.length > 0) parameters.push(`Question types: ${formatList(qTypes)}`);
                         
-                        if (reading) prompt += `The reading level should be: ${reading}. `;
+                        if (reading) parameters.push(`Reading level: ${reading}`);
                         
-                        if (assessAnswerKey.checked) prompt += `Provide a detailed answer key for all questions. `;
+                        if (assessAnswerKey.checked) parameters.push('Include a detailed answer key');
                         
-                        prompt += "Format the quiz as a simple, clean, ready-to-print document. Do not include any extra commentary, just the questions and (if requested) the answer key. The output should be easily copy-pasted into another program or document. ";
+                        formatText = "Format the quiz as a simple, clean, ready-to-print document. Do not include any extra commentary, just the questions and (if requested) the answer key. The output should be easily copy-pasted into another program or document.";
                         break;
 
                     case 'lesson-designer':
-                        prompt += `Design a detailed lesson plan for a ${grade} ${subject ? subject : ''} class. `;
-                        if (topic) prompt += `The topic is "${topic}". `;
-
+                        taskText = `Design a detailed lesson plan for a ${grade} ${subject ? subject : ''} class`;
+                        if (topic) taskText += ` on "${topic}"`;
+                        taskText += '.';
+                        
                         const len = lessonLength.value.trim();
-                        if (len) prompt += `The class period is ${len}. `;
+                        if (len) parameters.push(`Class length: ${len}`);
 
                         const structure = getCheckedValues('.lesson-structure');
-                        if (structure.length > 0) prompt += `The lesson must include these components: ${formatList(structure)}. `;
+                        if (structure.length > 0) parameters.push(`Lesson components: ${formatList(structure)}`);
 
                         const diff = lessonDiffLevel.value;
-                        if (diff) prompt += `For differentiation, provide ${diff}. `;
+                        if (diff) parameters.push(`Differentiation: Provide ${diff}`);
                         
-                        if (reading) prompt += `All student-facing materials should be at a ${reading}. `;
+                        if (reading) parameters.push(`Reading level for materials: ${reading}`);
                         break;
 
                     case 'exit-ticket-generator':
-                        prompt += `Generate a short formative check for understanding (exit ticket) for ${grade} ${subject ? subject : ''} students. `;
-                        if (topic) prompt += `The topic is "${topic}". `;
+                        taskText = `Generate a short formative check for understanding (exit ticket) for ${grade} ${subject ? subject : ''} students`;
+                        if (topic) taskText += ` on "${topic}"`;
+                        taskText += '.';
  
                         const numPrompts = etNumPrompts.value;
-                        if (numPrompts) prompt += `Produce ${numPrompts} prompts. `;
+                        if (numPrompts) parameters.push(`${numPrompts} prompts`);
 
                         const etDokTypes = getCheckedValues('.et-dok-type');
-                        if (etDokTypes.length > 0) prompt += `The prompts should target the following levels: ${formatList(etDokTypes)}. `;
+                        if (etDokTypes.length > 0) parameters.push(`DOK levels: ${formatList(etDokTypes)}`);
 
                         const etFormats = getCheckedValues('.et-format');
-                        if (etFormats.length > 0) prompt += `Use the following formats: ${formatList(etFormats)}. `;
+                        if (etFormats.length > 0) parameters.push(`Formats: ${formatList(etFormats)}`);
                         
-                        if (reading) prompt += `The reading level should be: ${reading}. `;
+                        if (reading) parameters.push(`Reading level: ${reading}`);
                         break;
 
                     case 'bell-ringer-creator':
-                        prompt += `Generate an engaging 5-10 minute class starter (bell ringer) for ${grade} ${subject ? subject : ''} students. `;
-                        if (topic) prompt += `The topic/skill focus is "${topic}". `;
+                        taskText = `Generate an engaging 5-10 minute class starter (bell ringer) for ${grade} ${subject ? subject : ''} students`;
+                        if (topic) taskText += ` focused on "${topic}"`;
+                        taskText += '.';
 
                         const numActivities = brNumActivities.value;
-                        if (numActivities) prompt += `Generate ${numActivities} different activity options. `;
+                        if (numActivities) parameters.push(`${numActivities} different activity options`);
 
                         const purposes = getCheckedValues('.br-purpose');
-                        if (purposes.length > 0) prompt += `The purpose of the opener should be to: ${formatList(purposes)}. `;
+                        if (purposes.length > 0) parameters.push(`Purpose: ${formatList(purposes)}`);
                         
-                        if (reading) prompt += `The reading level should be: ${reading}. `;
+                        if (reading) parameters.push(`Reading level: ${reading}`);
                         break;
 
                     case 'differentiation-builder':
-                        prompt += `Create a tiered differentiation task for ${grade} ${subject ? subject : ''} students. `;
-                        if (topic) prompt += `The core text or concept is "${topic}". `;
+                        taskText = `Create a tiered differentiation task for ${grade} ${subject ? subject : ''} students`;
+                        if (topic) taskText += ` on "${topic}"`;
+                        taskText += '.';
 
                         const activityType = diffActivityType.value;
-                        if (activityType) prompt += `The activity type is: ${activityType}. `;
+                        if (activityType) parameters.push(`Activity type: ${activityType}`);
 
-                        prompt += `Create versions for "below level", "on level", and "above level" students. `;
+                        parameters.push('Create versions for "below level", "on level", and "above level" students');
                         
-                        if (reading) prompt += `The "on level" tier should use a ${reading}. Adjust the other tiers accordingly. `;
+                        if (reading) parameters.push(`"On level" reading: ${reading} (adjust others accordingly)`);
 
                         const outputFormat = diffOutputFormat.value;
-                        if (outputFormat) prompt += `Present the output as ${outputFormat}. `;
+                        if (outputFormat) parameters.push(`Present output as ${outputFormat}`);
                         break;
 
                     // Fallback for simpler tools
                     case 'writing-prompt':
-                        prompt += `Create an engaging and creative writing prompt for ${grade} ${subject ? subject : ''} students. `;
-                        if (topic) prompt += `The prompt should be about "${topic}". `;
-                        if (reading) prompt += `The prompt should be written at a ${reading}. `;
+                        taskText = `Create an engaging and creative writing prompt for ${grade} ${subject ? subject : ''} students`;
+                        if (topic) taskText += ` about "${topic}"`;
+                        taskText += '.';
+                        if (reading) parameters.push(`Reading level: ${reading}`);
                         break;
                     case 'explanation':
-                        prompt += `Explain a concept in a clear, age-appropriate way for a ${grade} ${subject ? subject : ''} student. `;
-                        if (topic) prompt += `The concept is "${topic}". `;
-                        if (reading) prompt += `The explanation should be at a ${reading}. `;
+                        taskText = `Explain a concept in a clear, age-appropriate way for a ${grade} ${subject ? subject : ''} student`;
+                        if (topic) taskText += `. The concept is "${topic}"`;
+                        taskText += '.';
+                        if (reading) parameters.push(`Reading level: ${reading}`);
                         break;
                     case 'email':
-                        prompt += `Write a professional and empathetic email to a parent. `;
-                        if (topic) prompt += `The email is regarding "${topic}". `;
+                        taskText = 'Write a professional and empathetic email to a parent';
+                        if (topic) taskText += ` regarding "${topic}"`;
+                        taskText += '.';
                         break;
                     case 'rubric':
-                        prompt += `Develop a detailed grading rubric. `;
-                        if (topic) prompt += `The rubric is for an assignment on "${topic}". `;
+                        taskText = 'Develop a detailed grading rubric';
+                        if (topic) taskText += ` for an assignment on "${topic}"`;
+                        taskText += '.';
                         break;
                 }
 
-                // --- D. Add Global Details and Finalize ---
-                if (details) {
-                    prompt += `\n\nADDITIONAL REQUIREMENTS: ${details}`;
+                // Add TASK section
+                prompt += 'TASK\n';
+                prompt += taskText + '\n\n';
+                
+                // Add PARAMETERS section if we have any
+                if (parameters.length > 0) {
+                    prompt += 'PARAMETERS\n';
+                    parameters.forEach(param => {
+                        prompt += `• ${param}\n`;
+                    });
+                    prompt += '\n';
                 }
                 
-                if (task) {
-                     prompt += `\n\nPlease ensure the response is high-quality and well-structured.`;
+                // Add FORMAT section if we have it
+                if (formatText) {
+                    prompt += 'FORMAT REQUIREMENTS\n';
+                    prompt += formatText + '\n\n';
                 }
 
-                outputPrompt.value = prompt.trim();
+                // --- D. Add ADDITIONAL REQUIREMENTS section if provided ---
+                if (details) {
+                    prompt += 'ADDITIONAL REQUIREMENTS\n';
+                    prompt += details + '\n\n';
+                }
+                
+                // Add quality statement
+                prompt += 'Please ensure the response is high-quality and well-structured.';
+
+                outputPrompt.value = prompt;
             }
 
             // --- 4. Event Listeners ---
@@ -560,9 +583,6 @@
                 document.querySelectorAll('.task-options input[type="number"]').forEach(el => el.value = '');
                 document.querySelectorAll('.task-options select').forEach(el => el.value = '');
                 document.querySelectorAll('.task-options input[type="checkbox"]').forEach(el => el.checked = false);
-                
-                // Clear output
-                // (Removed references to generated-content)
 
                 generatePrompt(); // Update the prompt and hide all conditional blocks
             });
@@ -575,7 +595,7 @@
                     document.execCommand('copy');
                     const originalText = copyButton.innerHTML;
                     copyButton.innerHTML = `
-                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <svg class="w-4 h-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                         </svg>
                         Copied!
@@ -587,13 +607,9 @@
                 window.getSelection().removeAllRanges();
             });
 
-            // --- 5. Removed Gemini API Call Logic ---
-
             // Initial call to set the placeholder text
             generatePrompt();
         });
     </script>
 </body>
 </html>
-
-
